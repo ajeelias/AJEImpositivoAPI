@@ -1,0 +1,93 @@
+# Clarion Compiler Output
+*.obj
+*.exe
+*.dll
+*.lib
+*.exp
+*.map
+*.pdb
+*.ilk
+*.bak
+*.~*
+*.$$*
+
+# Clarion Data Files
+*.TPS
+*.DAT
+*.K*
+*.MEM
+*.DDF
+
+# Clarion Temporary Files
+*.RED
+*.LOG
+*.ERR
+*.temp
+*.tmp
+ERRORS.TXT
+
+# OpenSSL Generated Files
+TicketR.xml
+TicketR.crt
+TicketR.b64
+TicketR1.XML
+LoginTicket.txt
+LoginRequest.xml
+LoginTicketPageReceived.TxT
+TokenRequest.log
+*Request.xml
+*Response.xml
+*.log
+
+# AFIP Response/Request Files
+A5Response.xml
+getPersonaA5.xml
+getUltimoNumero.xml
+FacturaElectronicaG.xml
+consultarMontoObligadoRecepcion.xml
+SolicitudCAE.Log
+
+# Certificate Files (Security)
+*.key
+*.crt
+*.csr
+*.pem
+*.pfx
+*.p12
+
+# IDE and Editor Files
+*.cbp
+*.layout
+*.depend
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Debug Files
+*.tps
+
+# Build directories
+/bin/
+/obj/
+/Debug/
+/Release/
+/x64/
+/x86/
+
+# Package directories
+/packages/
+/node_modules/
+
+# Other
+*.bak
+*~

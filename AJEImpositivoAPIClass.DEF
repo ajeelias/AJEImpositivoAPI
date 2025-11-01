@@ -1,0 +1,29 @@
+!region Begin Comments
+!!>Product         Impositivo API Class
+!!>Author          Alejandro J. Elías
+!!>Company         DeveloperTeam
+!!>Copyright       @2025
+!!>Version         001.0
+!!>Template        
+!!>Company URL     www.developerteam.com.ar
+!!>Created         JAN 10,2025
+!!>Modified        JAN 10,2025
+VTokenSignImpositivo          FILE,DRIVER('TOPSPEED'),NAME('VTokenSignImpositivo'),PRE(VTI),BINDABLE,CREATE,THREAD ! Facturas Electronicas, Token y Sign por Puesto de Trabajo
+FindKey                  KEY(VTI:CUIT,VTI:WebServices),NOCASE,PRIMARY !   
+ConfKey                  KEY(VTI:Codigo_Configuracion,VTI:WebServices),NOCASE !                    
+Record                   RECORD,PRE()
+Codigo_Configuracion        LONG                           !                     
+WebServices                 CSTRING(255)                   !                     
+STATION                     CSTRING(51)                    ! Nombre de PC desde autorizada
+TOKEN                       STRING(2048)                   ! Código del Token obtenido del Ticket de Autorización
+SIGN                        STRING(2048)                   ! Código del Sign Obtenido del Ticket de Autorización
+FECHA_A                     LONG                           ! Fecha de Autorización del Token y Sign
+HORA_EX                     LONG                           !                     
+NOMBRE_KEY                  CSTRING(1025)                  ! Nombre de la Clave por Puesto de Trabajo
+NOMBRE_CSR                  CSTRING(1025)                  ! Nombre de Certificado Signed Request para ser Enviado
+NOMBRE_CRT                  CSTRING(1025)                  ! Nombre Certificado digital devuelto por la AFIP
+PathCE                      CSTRING(1025)                  !                     
+Modo                        BYTE                           !                     
+CUIT                        STRING(13)                     !                     
+                         END
+                     END                       

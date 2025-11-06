@@ -18,6 +18,13 @@ La rama `main` está protegida con las siguientes reglas:
 
 ### ✅ Protecciones Adicionales
 - **Enforce admins**: ❌ Deshabilitado (el owner/administrador puede hacer bypass de las reglas)
+- **Aprobaciones requeridas**: 2 (DOS revisores deben aprobar)
+- **Descartar aprobaciones obsoletas**: ✅ Habilitado (si hay nuevos commits, se descartan aprobaciones previas)
+- **Requiere aprobación del último push**: ✅ Habilitado
+- **No requiere code owners**: ❌ Deshabilitado (cualquier colaborador puede aprobar)
+
+### ✅ Protecciones Adicionales
+- **Enforce admins**: ✅ Los administradores también deben seguir las reglas
 - **Historial lineal requerido**: ✅ No se permiten merge commits, solo rebase
 - **Force push**: ❌ Bloqueado
 - **Eliminación de rama**: ❌ Bloqueado
@@ -72,6 +79,12 @@ gh pr create --title "Título del PR" --body "Descripción detallada"
    - Necesitarás una nueva aprobación
 4. **Merge**: Una vez con 1 aprobación, se puede hacer merge
 5. **Owner/Admin**: El propietario o administrador puede hacer merge sin aprobaciones si es necesario
+1. **Asignar revisores**: Mínimo 2 personas deben revisar
+2. **Revisores aprueban**: Ambos revisores deben dar "Approve"
+3. **Si hay cambios solicitados**: Realizar commits adicionales
+   - ⚠️ Las aprobaciones previas se descartarán automáticamente
+   - Necesitarás 2 nuevas aprobaciones
+4. **Merge**: Una vez con 2 aprobaciones, se puede hacer merge
 
 ### 6. Merge del Pull Request
 
@@ -124,6 +137,9 @@ gh pr close 123
 👑 **OWNER/ADMIN BYPASS**: El propietario o administradores del repositorio pueden hacer merge sin aprobaciones si es necesario.
 
 ⚠️ **Nuevos commits = Nueva aprobación**: Si haces push de nuevos commits después de recibir aprobación, la aprobación se descarta y necesitarás una nueva.
+⚠️ **2 APROBACIONES REQUERIDAS**: El merge solo se habilita después de que 2 revisores diferentes aprueben el PR.
+
+⚠️ **Nuevos commits = Nuevas aprobaciones**: Si haces push de nuevos commits después de recibir aprobaciones, las aprobaciones se descartan y necesitarás 2 nuevas.
 
 ✅ **Historial lineal**: Solo se permite rebase merge, manteniendo un historial limpio sin merge commits.
 

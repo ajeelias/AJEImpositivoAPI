@@ -1,0 +1,78 @@
+name: Notify Discord
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    types: [opened, reopened, closed]
+  release:
+    types: [published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compose and send Discord embed
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_STATE: ${{ github.event.pull_request.state }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          PR_HTML: ${{ github.event.pull_request.html_url }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+          PUSH_COMMITS: ${{ toJson(github.event.commits) }}
+        run: |
+          jq --version >/dev/null 2>&1 || sudo apt-get update && sudo apt-get install -y jq
+
+          color_push=3447003       # azul
+          color_pr=15105570        # naranja
+          color_merged=3066993     # verde
+          color_closed=15158332    # rojo
+          color_release=10181046   # violeta
+
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            commits=$(echo "$PUSH_COMMITS" | jq -r '[.[].message] | map("- " + .) | join("\n")')
+            [ -z "$commits" ] && commits="(sin mensajes)"
+            title="Push en $GITHUB_REPO"
+            desc="**Ref:** ${GITHUB_REF}\n**Autor:** ${GITHUB_ACTOR}\n**SHA:** ${GITHUB_SHA}\n\n**Commits:**\n${commits}"
+            color=$color_push
+            url="https://github.com/${GITHUB_REPO}/commit/${GITHUB_SHA}"
+
+          elif [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            title="PR: ${PR_TITLE}"
+            if [ "$PR_MERGED" = "true" ]; then
+              desc="**Estado:** MERGED\n**Autor:** ${GITHUB_ACTOR}"
+              color=$color_merged
+            elif [ "$PR_STATE" = "closed" ]; then
+              desc="**Estado:** CLOSED\n**Autor:** ${GITHUB_ACTOR}"
+              color=$color_closed
+            else
+              desc="**Estado:** OPENED/REOPENED\n**Autor:** ${GITHUB_ACTOR}"
+              color=$color_pr
+            fi
+            url="${PR_HTML}"
+
+          elif [ "$GITHUB_EVENT_NAME" = "release" ]; then
+            title="Release: ${RELEASE_NAME}"
+            desc="**Tag:** ${RELEASE_TAG}\n**Autor:** ${GITHUB_ACTOR}"
+            color=$color_release
+            url="${RELEASE_URL}"
+          else
+            title="Evento: ${GITHUB_EVENT_NAME}"
+            desc="No está mapeado, pero llegó evento."
+            color=$color_pr
+            url="https://github.com/${GITHUB_REPO}"
+          fi
+
+          payload=$(jq -n --arg t "$title" --arg d "$desc" --arg u "$url" --argjson c $color \
+          '{embeds: [{title: $t, description: $d, url: $u, color: $c}] }')
+
+          curl -sS -X POST -H "Content-Type: application/json" \
+            -d "$payload" "$DISCORD_WEBHOOK_URL" >/dev/null
